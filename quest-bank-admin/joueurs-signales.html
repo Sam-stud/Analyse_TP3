@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joueurs signalés – Quest Bank Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="barre"></header>
+  <main>
+    <h1>Joueurs signalés</h1>
+    <div id="messages"></div>
+
+    <table id="tableau-joueurs" hidden>
+      <thead>
+        <tr>
+          <th>Joueur</th>
+          <th>Motif du signalement</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="corps-joueurs"></tbody>
+    </table>
+    <p id="liste-vide" class="vide" hidden>Aucun joueur signalé pour le moment.</p>
+  </main>
+  <script src="js/dataAccess.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/adminService.js"></script>
+  <script src="js/pageJoueursSignales.js"></script>
+</body>
+</html>

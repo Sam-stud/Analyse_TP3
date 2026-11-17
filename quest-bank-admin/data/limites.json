@@ -1,0 +1,14 @@
+{
+  "users": [
+    { "id": 1, "nom": "Merlin", "role": "admin", "statut": "actif" },
+    { "id": 2, "nom": "Troll13", "role": "joueur", "statut": "inactif" },
+    { "id": 3, "nom": "Gobelin_Le_Magnifique_Seigneur_Des_Marais_De_Brume_Eternelle_Et_Des_Terres_Oubliees", "role": "joueur", "statut": "actif" }
+  ],
+  "signalements": [
+    { "id": 10, "joueurId": 2, "motif": "Joueur déjà banni, signalé à nouveau", "date": "2026-11-10" },
+    { "id": 11, "joueurId": 3, "motif": "Un motif très long pour tester l'affichage aux limites : le joueur a répété des propos inappropriés dans le chat général, dans le chat de guilde, dans les messages privés et dans la description de son profil pendant plusieurs jours consécutifs, malgré plusieurs avertissements automatiques envoyés par le système de modération.", "date": "2026-11-11" }
+  ],
+  "bugs": [
+    { "id": 100, "titre": "Un titre de bogue très long pour tester les limites d'affichage de la liste des bogues rapportés", "description": "Description très longue : le bouton Payer reste grisé après avoir terminé la quête de la carte de crédit, puis le solde affiché ne correspond plus au solde réel, puis le mage conseiller répond à côté de la question, puis l'application se fige quelques secondes à chaque changement d'écran.", "joueurId": 3, "date": "2026-11-12" }
+  ]
+}

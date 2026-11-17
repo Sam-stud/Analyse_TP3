@@ -1,0 +1,18 @@
+{
+  "users": [
+    { "id": 1, "nom": "Merlin", "role": "admin", "statut": "actif" },
+    { "id": 2, "nom": "Gobelin42", "role": "joueur", "statut": "actif" },
+    { "id": 3, "nom": "Elfe07", "role": "joueur", "statut": "actif" },
+    { "id": 4, "nom": "Nain99", "role": "joueur", "statut": "actif" }
+  ],
+  "signalements": [
+    { "id": 10, "joueurId": 2, "motif": "Propos inappropriés dans le chat", "date": "2026-11-10" },
+    { "id": 11, "joueurId": 3, "motif": "Pseudonyme offensant", "date": "2026-11-11" },
+    { "id": 12, "joueurId": 4, "motif": "Harcèlement d'un autre joueur", "date": "2026-11-12" }
+  ],
+  "bugs": [
+    { "id": 100, "titre": "Quête impossible à terminer", "description": "Le bouton Payer reste grisé.", "joueurId": 3, "date": "2026-11-12" },
+    { "id": 101, "titre": "Solde incorrect", "description": "Le solde ne se met pas à jour après une quête.", "joueurId": 4, "date": "2026-11-13" },
+    { "id": 102, "titre": "Mage ne répond pas", "description": "Le conseiller reste en chargement.", "joueurId": 2, "date": "2026-11-14" }
+  ]
+}

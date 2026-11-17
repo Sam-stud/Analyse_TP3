@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bogues rapportés – Quest Bank Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="barre"></header>
+  <main>
+    <h1>Bogues rapportés</h1>
+    <div id="messages"></div>
+    <!-- US 282 (Samithika) : à implanter ici (bogues.html + js/pageBogues.js + AdminService.listerBogues). -->
+    <p class="vide">Page en construction (US 282).</p>
+  </main>
+  <script src="js/dataAccess.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!Auth.jeton()) { window.location.href = "login.html"; return; }
+      UI.barreOutils();
+    });
+  </script>
+</body>
+</html>

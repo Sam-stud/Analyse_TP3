@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion – Quest Bank Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="barre"></header>
+  <main>
+    <h1>Connexion</h1>
+    <div id="messages"></div>
+    <form id="form-login">
+      <label for="nom">Nom d'utilisateur</label>
+      <input type="text" id="nom" name="nom" autocomplete="off" autofocus>
+      <button type="submit">Se connecter</button>
+      <p class="aide">Démo : « Merlin » est administrateur. Les autres comptes sont des joueurs (accès refusé).</p>
+    </form>
+  </main>
+  <script src="js/dataAccess.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pageLogin.js"></script>
+</body>
+</html>
