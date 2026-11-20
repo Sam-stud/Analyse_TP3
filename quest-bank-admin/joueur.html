@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace joueur – Quest Bank</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="barre"></header>
+  <main>
+    <h1>Espace joueur</h1>
+    <div id="messages"></div>
+
+    <!-- Vue 1 : connexion du joueur -->
+    <section id="vue-connexion">
+      <form id="form-joueur">
+        <label for="nom-joueur">Nom de joueur</label>
+        <input type="text" id="nom-joueur" name="nom" autocomplete="off" autofocus>
+        <button type="submit" id="btn-connexion-joueur">Se connecter au jeu</button>
+        <p class="aide">Démo : « Gobelin42 », « Elfe07 » et « Nain99 » sont des joueurs. Après un bannissement par l'administrateur, la connexion est refusée.</p>
+      </form>
+    </section>
+
+    <!-- Vue 2 : joueur connecté (accessible seulement si le compte est actif) -->
+    <section id="vue-jeu" hidden>
+      <p id="bienvenue"></p>
+      <div class="cartes">
+        <button type="button" id="btn-quete">Partir en quête</button>
+        <button type="button" id="btn-deconnexion-joueur" class="secondaire">Se déconnecter</button>
+      </div>
+    </section>
+  </main>
+  <script src="js/dataAccess.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pageJoueur.js"></script>
+</body>
+</html>
