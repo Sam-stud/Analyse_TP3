@@ -90,6 +90,21 @@ async function partirEnQuete() {
   }
 }
 
+// Suppression de son propre compte (simulation) : après confirmation, le compte n'existe plus.
+async function supprimerMonCompte() {
+  if (!(await revalider())) return;
+  const session = sessionJoueur();
+  if (!window.confirm("Voulez-vous vraiment supprimer votre compte ? Cette action est définitive.")) return;
+  try {
+    DataAccess.supprimerCompteLocal(session.nom); // global : touche tous les jeux de données
+    fermerSession();
+    UI.message("succes", "Votre compte a été supprimé. Vous ne pouvez plus vous connecter avec ce nom.");
+  } catch (e) {
+    console.error(e);
+    UI.message("erreur", "La suppression du compte n'a pas pu être effectuée.");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   // Barre d'outils du socle (jeu de données + réinitialisation), sans les boutons liés à l'administrateur.
   UI.barreOutils({ connecte: false, onChange: init });
@@ -101,6 +116,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("form-joueur").addEventListener("submit", connecterJoueur);
   document.getElementById("btn-quete").addEventListener("click", partirEnQuete);
+  document.getElementById("btn-supprimer-compte").addEventListener("click", supprimerMonCompte);
   document.getElementById("btn-deconnexion-joueur").addEventListener("click", () => {
     fermerSession();
     UI.message("info", "Vous êtes déconnecté.");

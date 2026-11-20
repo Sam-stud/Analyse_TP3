@@ -38,13 +38,52 @@ const DataAccess = {
     }
   },
 
-  // Retourne { users, signalements, bugs } avec les bannissements locaux appliqués.
+  // Les suppressions de compte sont GLOBALES (une seule clé, pas une par jeu de données) :
+  // un joueur qui supprime son compte disparaît de tous les jeux (Normal, Limites, Erreurs...).
+  // On les identifie par le nom (insensible à la casse), car les ids ne sont pas stables d'un jeu à l'autre
+  // (ex. l'id 2 est Gobelin42 dans « normal » mais Troll13 dans « limites »).
+  _CLE_SUPPRIMES: "qb_supprimes",
+
+  _normaliserNom(nom) {
+    return String(nom).trim().toLowerCase();
+  },
+
+  // Noms (en minuscules) des comptes supprimés par leur propriétaire (simulation, gardée dans localStorage).
+  comptesSupprimes() {
+    try {
+      return JSON.parse(localStorage.getItem(this._CLE_SUPPRIMES) || "[]");
+    } catch (e) {
+      return [];
+    }
+  },
+
+  // Ancien format : suppressions par jeu, par id (clé qb_supprimes_<jeu>). On les convertit en noms
+  // (via le jeu courant) dans la liste globale, puis on retire l'ancienne clé.
+  _migrerAnciennesSuppressions(donnees) {
+    const cleAncienne = `qb_supprimes_${this.jeuCourant()}`;
+    const brut = localStorage.getItem(cleAncienne);
+    if (brut === null) return;
+    try {
+      const ids = JSON.parse(brut);
+      (donnees.users || [])
+        .filter((u) => ids.includes(u.id))
+        .forEach((u) => this.supprimerCompteLocal(u.nom));
+    } catch (e) {
+      // ancienne valeur illisible : on l'abandonne
+    }
+    localStorage.removeItem(cleAncienne);
+  },
+
+  // Retourne { users, signalements, bugs } avec les bannissements locaux appliqués
+  // et sans les comptes supprimés (ils n'existent plus : introuvables pour tout le monde).
   async charger() {
     const donnees = await this.lireJSON(this.jeuCourant());
+    this._migrerAnciennesSuppressions(donnees);
     const bans = this.bansLocaux();
-    const users = (donnees.users || []).map((u) =>
-      bans.includes(u.id) ? { ...u, statut: "inactif" } : u
-    );
+    const supprimes = this.comptesSupprimes();
+    const users = (donnees.users || [])
+      .filter((u) => !supprimes.includes(this._normaliserNom(u.nom)))
+      .map((u) => (bans.includes(u.id) ? { ...u, statut: "inactif" } : u));
     return {
       users,
       signalements: donnees.signalements || [],
@@ -58,6 +97,16 @@ const DataAccess = {
       bans.push(userId);
     }
     localStorage.setItem(this._cleBans(), JSON.stringify(bans));
+  },
+
+  // Supprime le compte du joueur (par son nom) dans tous les jeux de données.
+  supprimerCompteLocal(nom) {
+    const cle = this._normaliserNom(nom);
+    const supprimes = this.comptesSupprimes();
+    if (!supprimes.includes(cle)) {
+      supprimes.push(cle);
+    }
+    localStorage.setItem(this._CLE_SUPPRIMES, JSON.stringify(supprimes));
   },
 
   // Utile pour rejouer les tests (retests et régression).

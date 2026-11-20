@@ -82,7 +82,7 @@ async function bannir(joueurId) {
     if (r.raison === "deja-banni") {
       UI.message("info", `Le joueur ${r.nom} est déjà banni.`);
     } else if (r.raison === "introuvable") {
-      UI.message("erreur", "Joueur introuvable : aucun bannissement n'a été effectué.");
+      UI.message("erreur", "Joueur introuvable : le compte n'existe plus (supprimé par le joueur ?). Aucun bannissement n'a été effectué.");
     } else {
       // jeton expiré, absent ou rôle insuffisant : aucun bannissement n'est effectué
       UI.messageAcces(ACTION_BANNIR);
