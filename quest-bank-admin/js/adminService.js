@@ -38,5 +38,26 @@ const AdminService = {
     return { ok: true, nom: user.nom };
   },
 
-  // ---------- US 282 (Samithika) : ajouter listerBogues() ici ----------
+  // ---------- US 282 (Samithika) ----------
+
+  // Liste des bogues signalés par les joueurs, avec le nom du joueur (croisement bugs x users).
+  // La vérification d'accès est refaite ici, côté service : l'UI n'est pas la seule à décider.
+  async listerBogues() {
+    const acces = Auth.verifierAcces();
+    if (!acces.ok) return { ok: false, raison: acces.raison };
+
+    const { users, bugs } = await DataAccess.charger();
+    const bogues = bugs.map((b) => {
+      const joueur = users.find((u) => u.id === b.joueurId);
+      return {
+        id: b.id,
+        titre: b.titre,
+        description: b.description,
+        joueurId: b.joueurId,
+        joueurNom: joueur ? joueur.nom : null, // null = joueur introuvable (voir data/erreurs.json)
+        date: b.date,
+      };
+    });
+    return { ok: true, bogues };
+  },
 };

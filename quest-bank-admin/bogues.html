@@ -11,17 +11,26 @@
   <main>
     <h1>Bogues rapportés</h1>
     <div id="messages"></div>
-    <!-- US 282 (Samithika) : à implanter ici (bogues.html + js/pageBogues.js + AdminService.listerBogues). -->
-    <p class="vide">Page en construction (US 282).</p>
+
+    <p><button type="button" id="btn-rafraichir" class="secondaire">Rafraîchir la liste</button></p>
+
+    <table id="tableau-bogues" hidden>
+      <thead>
+        <tr>
+          <th>Titre du bogue</th>
+          <th>Description du problème</th>
+          <th>Joueur qui l'a signalé</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="corps-bogues"></tbody>
+    </table>
+    <p id="liste-vide" class="vide" hidden>Aucun bogue rapporté pour le moment.</p>
   </main>
   <script src="js/dataAccess.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (!Auth.jeton()) { window.location.href = "login.html"; return; }
-      UI.barreOutils();
-    });
-  </script>
+  <script src="js/adminService.js"></script>
+  <script src="js/pageBogues.js"></script>
 </body>
 </html>
