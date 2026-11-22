@@ -6,6 +6,13 @@
 const CLE_SESSION_JOUEUR = "qb_joueur";
 const MESSAGE_SUSPENDU = "Compte suspendu : vous ne pouvez plus accéder au jeu.";
 
+function dateDuJour() {
+  const maintenant = new Date();
+  const mois = String(maintenant.getMonth() + 1).padStart(2, "0");
+  const jour = String(maintenant.getDate()).padStart(2, "0");
+  return `${maintenant.getFullYear()}-${mois}-${jour}`;
+}
+
 function sessionJoueur() {
   try {
     return JSON.parse(sessionStorage.getItem(CLE_SESSION_JOUEUR));
@@ -90,6 +97,33 @@ async function partirEnQuete() {
   }
 }
 
+async function signalerBogue(evt) {
+  evt.preventDefault();
+  if (!(await revalider())) return;
+
+  const champ = document.getElementById("description-bogue");
+  const description = champ.value.trim();
+  if (!description) {
+    UI.message("erreur", "Veuillez décrire le bogue rencontré.");
+    return;
+  }
+
+  const session = sessionJoueur();
+  try {
+    DataAccess.signalerBogueLocal({
+      titre: "Bogue signalé par le joueur",
+      description,
+      joueurId: session.userId,
+      date: dateDuJour(),
+    });
+    champ.value = "";
+    UI.message("succes", "Votre signalement a bien été envoyé à l'administrateur.");
+  } catch (e) {
+    console.error(e);
+    UI.message("erreur", "Le signalement n'a pas pu être envoyé.");
+  }
+}
+
 // Suppression de son propre compte (simulation) : après confirmation, le compte n'existe plus.
 async function supprimerMonCompte() {
   if (!(await revalider())) return;
@@ -115,6 +149,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   document.getElementById("form-joueur").addEventListener("submit", connecterJoueur);
+  document.getElementById("form-bogue").addEventListener("submit", signalerBogue);
   document.getElementById("btn-quete").addEventListener("click", partirEnQuete);
   document.getElementById("btn-supprimer-compte").addEventListener("click", supprimerMonCompte);
   document.getElementById("btn-deconnexion-joueur").addEventListener("click", () => {
