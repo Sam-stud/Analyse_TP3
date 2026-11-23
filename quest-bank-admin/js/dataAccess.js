@@ -4,8 +4,7 @@
 const JEUX_DE_DONNEES = {
   normal: "Normal",
   limites: "Limites",
-  vide: "Limites : listes vides",
-  erreurs: "Erreurs",
+  erreur: "Erreurs",
 };
 
 const DataAccess = {
