@@ -5,6 +5,33 @@
 
 const CLE_SESSION_JOUEUR = "qb_joueur";
 const MESSAGE_SUSPENDU = "Compte suspendu : vous ne pouvez plus accéder au jeu.";
+const MOTIFS_INJECTION = [
+  /<script\b/i,
+  /javascript\s*:/i,
+  /\bon[a-z]+\s*=/i,
+  /\b(?:eval|alert|prompt|confirm|fetch|setTimeout|setInterval|Function)\s*\(/i,
+  /\bdocument\s*\.\s*(?:cookie|write|location)\b/i,
+  /\bwindow\s*\.\s*location\b/i,
+  /innerHTML/i,
+  /\bunion\s+(?:all\s+)?select\b/i,
+  /\b(?:drop|truncate|alter)\s+table\b/i,
+  /\bdelete\s+from\b/i,
+  /\binsert\s+into\b/i,
+  /\bupdate\s+\w+\s+set\b/i,
+  /\b(?:or|and)\s+['"]?\w+['"]?\s*(?:==|=|<>|!=|>=|<=)\s*['"]?\w+['"]?\b/i,
+  /\b(?:or|and)\b[^\n]{0,60}(?:--|#|\/\*)/i,
+  /(?:--|#|\/\*)[^\n]{0,60}\b(?:or|and|select|union)\b/i,
+  /['"]\s*(?:--|#)/,
+  /;\s*(?:--|#)/,
+  /\/\*/,
+  /\b(?:xp_cmdshell|waitfor\s+delay|sleep\s*\(|benchmark\s*\()/i,
+  /%3c\s*script/i,
+  /&#x?3c\s*script/i,
+];
+
+function detecterInjection(texte) {
+  return MOTIFS_INJECTION.some((motif) => motif.test(String(texte)));
+}
 
 function dateDuJour() {
   const maintenant = new Date();
@@ -101,6 +128,8 @@ async function signalerBogue(evt) {
   evt.preventDefault();
   if (!(await revalider())) return;
 
+  const champTitre = document.getElementById("titre-bogue");
+  const titreSaisi = champTitre.value.trim();
   const champ = document.getElementById("description-bogue");
   const description = champ.value.trim();
   if (!description) {
@@ -109,15 +138,37 @@ async function signalerBogue(evt) {
   }
 
   const session = sessionJoueur();
+  const attaque = detecterInjection(`${titreSaisi}\n${description}`);
+  const date = dateDuJour();
   try {
     DataAccess.signalerBogueLocal({
-      titre: "Bogue signalé par le joueur",
+      titre: titreSaisi || (attaque
+        ? "Tentative de cyberattaque (injection JavaScript/SQL)"
+        : "Bogue signalé par le joueur"),
       description,
       joueurId: session.userId,
-      date: dateDuJour(),
+      joueurNom: session.nom,
+      date,
+      estAttaque: attaque,
+      typeAttaque: attaque ? "injection JavaScript/SQL" : null,
     });
+    if (attaque) {
+      DataAccess.signalerCyberattaqueLocal({
+        joueurId: session.userId,
+        joueurNom: session.nom,
+        motif: "Tentative de cyberattaque (injection JavaScript/SQL) via le formulaire de signalement de bogue",
+        date,
+        estCyberattaque: true,
+      });
+    }
+    champTitre.value = "";
     champ.value = "";
-    UI.message("succes", "Votre signalement a bien été envoyé à l'administrateur.");
+    UI.message(
+      "succes",
+      attaque
+        ? "Signalement enregistré. La tentative d'injection a été signalée automatiquement à l'administration."
+        : "Votre signalement a bien été envoyé à l'administrateur."
+    );
   } catch (e) {
     console.error(e);
     UI.message("erreur", "Le signalement n'a pas pu être envoyé.");

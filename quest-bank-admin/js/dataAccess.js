@@ -50,6 +50,18 @@ const DataAccess = {
     }
   },
 
+  _cleSignalements() {
+    return `qb_signalements_${this.jeuCourant()}`;
+  },
+
+  signalementsLocaux() {
+    try {
+      return JSON.parse(localStorage.getItem(this._cleSignalements()) || "[]");
+    } catch (e) {
+      return [];
+    }
+  },
+
   // Les suppressions de compte sont GLOBALES (une seule clé, pas une par jeu de données) :
   // un joueur qui supprime son compte disparaît de tous les jeux (Normal, Limites, Erreurs...).
   // On les identifie par le nom (insensible à la casse), car les ids ne sont pas stables d'un jeu à l'autre
@@ -87,7 +99,7 @@ const DataAccess = {
   },
 
   // Retourne { users, signalements, bugs } avec les bannissements locaux appliqués,
-  // les bogues signalés localement ajoutés, et sans les comptes supprimés (introuvables pour tous).
+  // les signalements et bogues locaux ajoutés, et sans les comptes supprimés (introuvables pour tous).
   async charger() {
     const donnees = await this.lireJSON(this.jeuCourant());
     this._migrerAnciennesSuppressions(donnees);
@@ -98,7 +110,7 @@ const DataAccess = {
       .map((u) => (bans.includes(u.id) ? { ...u, statut: "inactif" } : u));
     return {
       users,
-      signalements: donnees.signalements || [],
+      signalements: [...(donnees.signalements || []), ...this.signalementsLocaux()],
       bugs: [...(donnees.bugs || []), ...this.bugsLocaux()],
     };
   },
@@ -119,6 +131,16 @@ const DataAccess = {
     }
     bugs.push({ id, ...bogue });
     localStorage.setItem(this._cleBugs(), JSON.stringify(bugs));
+  },
+
+  signalerCyberattaqueLocal(signalement) {
+    const signalements = this.signalementsLocaux();
+    let id = Date.now();
+    while (signalements.some((s) => s.id === id)) {
+      id += 1;
+    }
+    signalements.push({ id, ...signalement });
+    localStorage.setItem(this._cleSignalements(), JSON.stringify(signalements));
   },
 
   // Supprime le compte du joueur (par son nom) dans tous les jeux de données.

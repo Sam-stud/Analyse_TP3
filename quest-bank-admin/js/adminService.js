@@ -15,10 +15,12 @@ const AdminService = {
       return {
         signalementId: s.id,
         joueurId: s.joueurId,
-        nom: user ? user.nom : null, // null = joueur introuvable
+        nom: user ? user.nom : s.joueurNom || null,
         statut: user ? user.statut : null,
         motif: s.motif,
         date: s.date,
+        estCyberattaque: s.estCyberattaque === true,
+        compteSupprime: !user && !!s.joueurNom,
       };
     });
     return { ok: true, joueurs };
@@ -54,8 +56,12 @@ const AdminService = {
         titre: b.titre,
         description: b.description,
         joueurId: b.joueurId,
-        joueurNom: joueur ? joueur.nom : null, // null = joueur introuvable (voir data/erreurs.json)
+        joueurNom: joueur ? joueur.nom : b.joueurNom || null,
+        statut: joueur ? joueur.statut : null,
         date: b.date,
+        estAttaque: b.estAttaque === true,
+        typeAttaque: b.typeAttaque || null,
+        compteSupprime: !joueur && !!b.joueurNom,
       };
     });
     return { ok: true, bogues };

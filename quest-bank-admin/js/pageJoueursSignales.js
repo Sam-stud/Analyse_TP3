@@ -27,25 +27,50 @@ function afficherJoueurs(joueurs) {
     const tr = document.createElement("tr");
     const introuvable = j.nom === null;
 
-    tr.appendChild(creerCellule(introuvable ? `Joueur introuvable (id ${j.joueurId})` : j.nom, "nom"));
-    tr.appendChild(creerCellule(j.motif, "motif"));
+    tr.appendChild(
+      creerCellule(
+        introuvable ? `Joueur introuvable (id ${j.joueurId})` : j.nom,
+        "nom"
+      )
+    );
+    const tdMotif = creerCellule(j.motif, "motif");
+    if (j.estCyberattaque) {
+      tdMotif.appendChild(document.createTextNode(" "));
+      const badgeAttaque = document.createElement("span");
+      badgeAttaque.className = "badge badge-inactif";
+      badgeAttaque.textContent = "CYBERATTAQUE";
+      tdMotif.appendChild(badgeAttaque);
+    }
+    tr.appendChild(tdMotif);
     tr.appendChild(creerCellule(j.date));
 
     const tdStatut = document.createElement("td");
     const badge = document.createElement("span");
-    const statut = introuvable ? "inconnu" : j.statut;
-    badge.className = `badge badge-${statut}`;
+    let statut = introuvable ? "inconnu" : j.statut;
+    let classeStatut = statut;
+    if (j.compteSupprime) {
+      statut = "compte supprimé";
+      classeStatut = "inconnu";
+    }
+    badge.className = `badge badge-${classeStatut}`;
     badge.textContent = statut;
     tdStatut.appendChild(badge);
     tr.appendChild(tdStatut);
 
     const tdAction = document.createElement("td");
-    const bouton = document.createElement("button");
-    bouton.type = "button";
-    bouton.className = "danger btn-bannir";
-    bouton.textContent = "Bannir";
-    bouton.dataset.joueurId = j.joueurId;
-    tdAction.appendChild(bouton);
+    if (j.compteSupprime) {
+      const impossible = document.createElement("span");
+      impossible.className = "badge badge-inconnu";
+      impossible.textContent = "Bannissement impossible";
+      tdAction.appendChild(impossible);
+    } else {
+      const bouton = document.createElement("button");
+      bouton.type = "button";
+      bouton.className = "danger btn-bannir";
+      bouton.textContent = "Bannir";
+      bouton.dataset.joueurId = j.joueurId;
+      tdAction.appendChild(bouton);
+    }
     tr.appendChild(tdAction);
 
     corps.appendChild(tr);

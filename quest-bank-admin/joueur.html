@@ -32,9 +32,12 @@
       </div>
 
       <form id="form-bogue">
+        <label for="titre-bogue">Titre du bogue</label>
+        <input type="text" id="titre-bogue" name="titre" placeholder="Ex. : bouton Payer grisé" autocomplete="off">
         <label for="description-bogue">Description du bogue rencontré</label>
         <input type="text" id="description-bogue" name="description" placeholder="Ex. : le bouton Payer reste grisé" autocomplete="off">
         <button type="submit" id="btn-signaler-bogue">Signaler le bogue à l'administrateur</button>
+        <p class="aide">Le texte est transmis tel quel à l'administrateur. Toute tentative d'injection JavaScript ou SQL est signalée automatiquement comme cyberattaque.</p>
       </form>
     </section>
   </main>
