@@ -4,21 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion – Quest Bank Admin</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3h12l4 6-10 12L2 9z' fill='%23e0b84c'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="page-auth">
   <aside id="menu-navigation" class="menu-lateral">
+    <div class="marque">
+      <span class="marque-logo" aria-hidden="true"></span>
+      <span class="marque-texte">Quest Bank<small>Console de gestion</small></span>
+    </div>
     <p class="titre-menu">Navigation</p>
-    <a href="login.html?cible=index.html">Interface administrateur</a>
-    <a href="login.html?cible=joueur.html">Interface joueur</a>
+    <a href="login.html?cible=index.html" class="lien-admin">Interface administrateur</a>
+    <a href="login.html?cible=joueur.html" class="lien-joueur">Interface joueur</a>
   </aside>
   <header id="barre"></header>
   <main>
+    <div class="blason" aria-hidden="true"></div>
     <h1>Connexion</h1>
+    <p class="sous-titre">Identifiez-vous pour accéder à votre espace.</p>
     <div id="messages"></div>
     <form id="form-login">
       <label for="nom">Nom d'utilisateur</label>
-      <input type="text" id="nom" name="nom" autocomplete="off" autofocus>
+      <input type="text" id="nom" name="nom" autocomplete="off" placeholder="Ex. : Merlin" autofocus>
       <button type="submit">Se connecter</button>
       <p class="aide">Démo : « Merlin » est administrateur. Les autres comptes sont des joueurs (accès refusé).</p>
     </form>

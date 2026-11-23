@@ -4,13 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Espace joueur – Quest Bank</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3h12l4 6-10 12L2 9z' fill='%23e0b84c'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="page-joueur">
   <aside id="menu-navigation" class="menu-lateral">
+    <div class="marque">
+      <span class="marque-logo" aria-hidden="true"></span>
+      <span class="marque-texte">Quest Bank<small>Console de gestion</small></span>
+    </div>
     <p class="titre-menu">Navigation</p>
-    <a href="login.html?cible=index.html">Interface administrateur</a>
-    <a href="joueur.html" class="actif">Interface joueur</a>
+    <a href="login.html?cible=index.html" class="lien-admin">Interface administrateur</a>
+    <a href="joueur.html" class="actif lien-joueur">Interface joueur</a>
   </aside>
   <header id="barre"></header>
   <main>
@@ -19,9 +24,11 @@
 
     <!-- Vue 1 : connexion du joueur -->
     <section id="vue-connexion">
+      <div class="blason blason-joueur" aria-hidden="true"></div>
+      <p class="sous-titre centre">Entrez votre nom de joueur pour rejoindre l'aventure.</p>
       <form id="form-joueur">
         <label for="nom-joueur">Nom de joueur</label>
-        <input type="text" id="nom-joueur" name="nom" autocomplete="off" autofocus>
+        <input type="text" id="nom-joueur" name="nom" autocomplete="off" placeholder="Ex. : Gobelin42" autofocus>
         <button type="submit" id="btn-connexion-joueur">Se connecter au jeu</button>
         <p class="aide">Démo : « Gobelin42 », « Elfe07 » et « Nain99 » sont des joueurs. Après un bannissement par l'administrateur, la connexion est refusée.</p>
       </form>
@@ -29,21 +36,38 @@
 
     <!-- Vue 2 : joueur connecté (accessible seulement si le compte est actif) -->
     <section id="vue-jeu" hidden>
-      <p id="bienvenue"></p>
-      <div class="cartes">
-        <button type="button" id="btn-quete">Partir en quête</button>
-        <button type="button" id="btn-deconnexion-joueur" class="secondaire">Se déconnecter</button>
-        <button type="button" id="btn-supprimer-compte" class="danger">Supprimer mon compte</button>
+      <div class="banniere">
+        <span class="avatar" aria-hidden="true"></span>
+        <p id="bienvenue"></p>
       </div>
 
-      <form id="form-bogue">
-        <label for="titre-bogue">Titre du bogue</label>
-        <input type="text" id="titre-bogue" name="titre" placeholder="Ex. : bouton Payer grisé" autocomplete="off">
-        <label for="description-bogue">Description du bogue rencontré</label>
-        <input type="text" id="description-bogue" name="description" placeholder="Ex. : le bouton Payer reste grisé" autocomplete="off">
-        <button type="submit" id="btn-signaler-bogue">Signaler le bogue à l'administrateur</button>
-        <p class="aide">Le texte est transmis tel quel à l'administrateur. Toute tentative d'injection JavaScript ou SQL est signalée automatiquement comme cyberattaque.</p>
-      </form>
+      <div class="grille-jeu">
+        <div class="colonne">
+          <div class="cartes cartes-jeu">
+            <button type="button" id="btn-quete">Partir en quête</button>
+          </div>
+
+          <div class="panneau zone-compte">
+            <h2>Mon compte</h2>
+            <p class="sous-titre">Quitter la partie ou supprimer définitivement votre compte.</p>
+            <div class="actions-compte">
+              <button type="button" id="btn-deconnexion-joueur" class="secondaire">Se déconnecter</button>
+              <button type="button" id="btn-supprimer-compte" class="danger">Supprimer mon compte</button>
+            </div>
+          </div>
+        </div>
+
+        <form id="form-bogue">
+          <h2>Signaler un bogue</h2>
+          <p class="sous-titre">Un problème en jeu ? Décrivez-le à l'administrateur.</p>
+          <label for="titre-bogue">Titre du bogue</label>
+          <input type="text" id="titre-bogue" name="titre" placeholder="Ex. : bouton Payer grisé" autocomplete="off">
+          <label for="description-bogue">Description du bogue rencontré</label>
+          <input type="text" id="description-bogue" name="description" placeholder="Ex. : le bouton Payer reste grisé" autocomplete="off">
+          <button type="submit" id="btn-signaler-bogue">Signaler le bogue à l'administrateur</button>
+          <p class="aide">Le texte est transmis tel quel à l'administrateur. Toute tentative d'injection JavaScript ou SQL est signalée automatiquement comme cyberattaque.</p>
+        </form>
+      </div>
     </section>
   </main>
   <script src="js/dataAccess.js"></script>

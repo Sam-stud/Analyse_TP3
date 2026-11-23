@@ -4,19 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accueil – Quest Bank Admin</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3h12l4 6-10 12L2 9z' fill='%23e0b84c'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <aside id="menu-navigation" class="menu-lateral">
+    <div class="marque">
+      <span class="marque-logo" aria-hidden="true"></span>
+      <span class="marque-texte">Quest Bank<small>Console de gestion</small></span>
+    </div>
     <p class="titre-menu">Navigation</p>
-    <a href="index.html" class="actif">Interface administrateur</a>
-    <a href="login.html?cible=joueur.html">Interface joueur</a>
+    <a href="index.html" class="actif lien-admin">Interface administrateur</a>
+    <a href="login.html?cible=joueur.html" class="lien-joueur">Interface joueur</a>
   </aside>
   <header id="barre"></header>
   <main>
-    <h1>Gestion des tâches administratives</h1>
+    <div class="entete-page">
+      <div>
+        <p class="surtitre">Tableau de bord</p>
+        <h1>Gestion des tâches administratives</h1>
+        <p class="sous-titre">Choisissez une file de travail pour commencer.</p>
+      </div>
+    </div>
     <div id="messages"></div>
-    <div class="cartes">
+    <div class="cartes cartes-admin">
       <button type="button" id="btn-joueurs" data-page="joueurs-signales.html">Joueurs signalés</button>
       <button type="button" id="btn-bogues" data-page="bogues.html">Bogues rapportés</button>
     </div>
