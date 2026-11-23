@@ -14,11 +14,30 @@
 
 body {
   margin: 0;
+  padding-left: 220px;
   background: var(--fond);
   color: var(--texte);
   font-family: Georgia, "Times New Roman", serif;
   line-height: 1.5;
 }
+
+.menu-lateral {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  padding: 1.25rem 1rem;
+  background: var(--carte);
+  border-right: 2px solid var(--or);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-lateral .titre-menu { margin: 0 0 0.5rem; color: var(--or); font-weight: bold; }
+.menu-lateral a { padding: 0.5rem 0.75rem; border: 1px solid transparent; border-radius: 4px; color: var(--texte); text-decoration: none; }
+.menu-lateral a:hover, .menu-lateral a.actif { border-color: var(--or); background: var(--fond); color: var(--or); }
 
 header#barre {
   display: flex;
