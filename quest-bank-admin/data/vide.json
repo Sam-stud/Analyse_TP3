@@ -1,7 +1,0 @@
-{
-  "users": [
-    { "id": 1, "nom": "Merlin", "role": "admin", "statut": "actif" }
-  ],
-  "signalements": [],
-  "bugs": []
-}
