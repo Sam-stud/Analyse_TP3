@@ -7,11 +7,11 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3h12l4 6-10 12L2 9z' fill='%23e0b84c'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="page-joueur">
+<body class="page-joueur theme-joueur">
   <aside id="menu-navigation" class="menu-lateral">
     <div class="marque">
       <span class="marque-logo" aria-hidden="true"></span>
-      <span class="marque-texte">Quest Bank<small>Console de gestion</small></span>
+      <span class="marque-texte">Quest Bank<small>Espace joueur</small></span>
     </div>
     <p class="titre-menu">Navigation</p>
     <a href="login.html?cible=index.html" class="lien-admin">Interface administrateur</a>
@@ -68,11 +68,31 @@
           <p class="aide">Le texte est transmis tel quel à l'administrateur. Toute tentative d'injection JavaScript ou SQL est signalée automatiquement comme cyberattaque.</p>
         </form>
       </div>
+
+      <!-- Historique des parties : joueurs rencontrés + signalement d'un joueur -->
+      <section id="historique" class="panneau panneau-historique" aria-labelledby="titre-historique">
+        <div class="entete-section">
+          <div>
+            <h2 id="titre-historique">Historique des parties</h2>
+            <p class="sous-titre">Retrouvez les joueurs avec qui vous avez joué. Un comportement inapproprié ? Utilisez le drapeau à côté de son nom.</p>
+          </div>
+          <span id="compteur-parties" class="pastille"></span>
+        </div>
+
+        <div id="joueurs-rencontres" class="rencontres" hidden>
+          <p class="partie-libelle">Joueurs rencontrés</p>
+          <ul id="liste-rencontres" class="liste-rencontres"></ul>
+        </div>
+
+        <div id="liste-parties" class="liste-parties"></div>
+        <p id="historique-vide" class="vide" hidden>Vous n'avez encore joué aucune partie.</p>
+      </section>
     </section>
   </main>
   <script src="js/dataAccess.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/joueurService.js"></script>
   <script src="js/pageJoueur.js"></script>
 </body>
 </html>

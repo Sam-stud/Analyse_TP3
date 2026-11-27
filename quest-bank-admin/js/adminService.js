@@ -4,26 +4,54 @@
 const AdminService = {
   // ---------- US 281 (Samuel) ----------
 
-  // Liste des joueurs signalés, avec leur nom et leur statut (croisement signalements x users).
+  // Liste des joueurs signalés (plus récents d'abord), avec leur nom et leur statut,
+  // le joueur qui a fait le signalement et la partie concernée (croisement signalements x users x parties).
   async listerJoueursSignales() {
     const acces = Auth.verifierAcces();
     if (!acces.ok) return { ok: false, raison: acces.raison };
 
-    const { users, signalements } = await DataAccess.charger();
-    const joueurs = signalements.map((s) => {
-      const user = users.find((u) => u.id === s.joueurId);
-      return {
-        signalementId: s.id,
-        joueurId: s.joueurId,
-        nom: user ? user.nom : s.joueurNom || null,
-        statut: user ? user.statut : null,
-        motif: s.motif,
-        date: s.date,
-        estCyberattaque: s.estCyberattaque === true,
-        compteSupprime: !user && !!s.joueurNom,
-      };
-    });
+    const { users, signalements, parties } = await DataAccess.charger();
+    const joueurs = signalements
+      .map((s) => {
+        const user = users.find((u) => u.id === s.joueurId);
+        const aSignaleur = s.signaleurId !== undefined && s.signaleurId !== null;
+        const signaleur = aSignaleur ? users.find((u) => u.id === s.signaleurId) : null;
+        const aPartie = s.partieId !== undefined && s.partieId !== null;
+        const partie = aPartie ? parties.find((p) => p.id === s.partieId) : null;
+        return {
+          signalementId: s.id,
+          joueurId: s.joueurId,
+          nom: user ? user.nom : s.joueurNom || null,
+          statut: user ? user.statut : null,
+          motif: s.motif,
+          date: s.date,
+          estCyberattaque: s.estCyberattaque === true,
+          compteSupprime: !user && !!s.joueurNom,
+          signaleurId: aSignaleur ? s.signaleurId : null,
+          signaleurNom: signaleur ? signaleur.nom : s.signaleurNom || null,
+          signaleurSupprime: aSignaleur && !signaleur,
+          partieId: aPartie ? s.partieId : null,
+          partieQuete: partie ? partie.quete : s.partieQuete || null,
+          partieDate: partie ? partie.date : s.partieDate || null,
+          statutSignalement: s.statutSignalement || "nouveau",
+        };
+      })
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)) || b.signalementId - a.signalementId);
     return { ok: true, joueurs };
+  },
+
+  // Suivi d'un signalement par l'administrateur (nouveau, en examen, traité, rejeté).
+  async changerStatutSignalement(signalementId, statutSignalement) {
+    const acces = Auth.verifierAcces();
+    if (!acces.ok) return { ok: false, raison: acces.raison };
+    const statutsValides = ["nouveau", "en-examen", "traite", "rejete"];
+    if (!statutsValides.includes(statutSignalement)) {
+      return { ok: false, raison: "statut-invalide" };
+    }
+    const { signalements } = await DataAccess.charger();
+    if (!signalements.some((s) => s.id === signalementId)) return { ok: false, raison: "introuvable" };
+    DataAccess.changerStatutSignalementLocal(signalementId, statutSignalement);
+    return { ok: true };
   },
 
   // Bannit un joueur : le déclare inactif. La vérification d'accès est refaite à chaque action.

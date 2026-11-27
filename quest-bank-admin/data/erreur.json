@@ -25,5 +25,11 @@
     { "id": 112, "titre": "Barre de vie incorrecte", "description": "La barre de vie affiche une valeur supérieure au maximum.", "joueurId": 5, "date": "2026-11-13", "statutBogue": "nouveau" },
     { "id": 113, "titre": "PNJ invisible", "description": "Un PNJ de quête n'apparaît pas dans la zone prévue.", "joueurId": 2, "date": "2026-11-12", "statutBogue": "nouveau" },
     { "id": 114, "titre": "Mini-carte décalée", "description": "La mini-carte ne suit plus la position du joueur.", "joueurId": 3, "date": "2026-11-11", "statutBogue": "nouveau" }
+  ],
+  "parties": [
+    { "id": 200, "quete": "La Crypte Corrompue", "date": "2026-11-23", "duree": 30, "resultat": "victoire", "joueurs": [2, 3, 999] },
+    { "id": 201, "quete": "Le Gouffre des Dettes", "date": "2026-11-20", "duree": 18, "resultat": "defaite", "joueurs": [2, 5] },
+    { "id": 202, "quete": "Partie sans date", "joueurs": [3, 2] },
+    { "id": 203, "quete": "Partie corrompue (aucun participant)", "date": "2026-11-17", "resultat": "abandon" }
   ]
 }

@@ -18,5 +18,10 @@
     { "id": 106, "titre": "Carte du monde floue", "description": "La carte du monde devient floue après un zoom avant/arrière.", "joueurId": 2, "date": "2026-11-14", "statutBogue": "nouveau" },
     { "id": 107, "titre": "Audio coupé en combat", "description": "Le son se coupe pendant les combats contre les boss.", "joueurId": 3, "date": "2026-11-13", "statutBogue": "nouveau" },
     { "id": 108, "titre": "Déconnexion après sauvegarde", "description": "Le joueur est déconnecté juste après une sauvegarde manuelle.", "joueurId": 2, "date": "2026-11-12", "statutBogue": "nouveau" }
+  ],
+  "parties": [
+    { "id": 200, "quete": "L'Interminable Odyssée des Marchands de Brume à travers les Sept Royaumes du Budget Équilibré et de l'Épargne Éternelle", "date": "2026-11-22", "duree": 600, "resultat": "victoire", "joueurs": [3, 2] },
+    { "id": 201, "quete": "Quête en solitaire", "date": "2026-11-19", "duree": 1, "resultat": "abandon", "joueurs": [3] },
+    { "id": 202, "quete": "Revanche dans les Marais", "date": "2026-11-16", "duree": 0, "resultat": "defaite", "joueurs": [2, 3, 3] }
   ]
 }
