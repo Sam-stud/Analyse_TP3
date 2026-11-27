@@ -691,6 +691,33 @@ input[type="text"]:focus {
 #btn-deconnexion-joueur { --ico: var(--i-sortie); }
 #btn-supprimer-compte { --ico: var(--i-corbeille); }
 
+/* ---------- Alertes bogues ---------- */
+.alerte-bogues {
+  margin: 1rem 2rem 0;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--rayon-s);
+  border: 1px solid var(--bord);
+  font-weight: 600;
+}
+.alerte-bogues-jaune {
+  color: #7a5600;
+  background: #fff4cc;
+  border-color: #e0b84c;
+}
+.alerte-bogues-rouge {
+  color: #7a1111;
+  background: #ffe0e0;
+  border-color: #d64545;
+}
+.select-statut-bogue {
+  min-width: 8.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--bord-fort);
+  background: var(--fond);
+  color: var(--texte);
+  font: inherit;
+}
 /* ---------- Petits écrans ---------- */
 @media (max-width: 900px) {
   .grille-jeu { grid-template-columns: 1fr; }

@@ -9,6 +9,14 @@
     { "id": 11, "joueurId": 3, "motif": "Un motif très long pour tester l'affichage aux limites : le joueur a répété des propos inappropriés dans le chat général, dans le chat de guilde, dans les messages privés et dans la description de son profil pendant plusieurs jours consécutifs, malgré plusieurs avertissements automatiques envoyés par le système de modération.", "date": "2026-11-11" }
   ],
   "bugs": [
-    { "id": 100, "titre": "Un titre de bogue très long pour tester les limites d'affichage de la liste des bogues rapportés", "description": "Description très longue : le bouton Payer reste grisé après avoir terminé la quête de la carte de crédit, puis le solde affiché ne correspond plus au solde réel, puis le mage conseiller répond à côté de la question, puis l'application se fige quelques secondes à chaque changement d'écran.", "joueurId": 3, "date": "2026-11-12" }
+    { "id": 100, "titre": "Bouton Payer grisé après quête", "description": "Le bouton Payer reste grisé après avoir terminé la quête de la carte de crédit.", "joueurId": 3, "date": "2026-11-20", "statutBogue": "nouveau" },
+    { "id": 101, "titre": "Solde affiché incorrect", "description": "Le solde affiché ne correspond plus au solde réel après une récompense.", "joueurId": 3, "date": "2026-11-19", "statutBogue": "nouveau" },
+    { "id": 102, "titre": "Mage conseiller hors sujet", "description": "Le mage conseiller répond à côté de la question posée dans l'aide.", "joueurId": 2, "date": "2026-11-18", "statutBogue": "nouveau" },
+    { "id": 103, "titre": "Fige à chaque changement d'écran", "description": "L'application se fige quelques secondes à chaque changement d'écran.", "joueurId": 3, "date": "2026-11-17", "statutBogue": "nouveau" },
+    { "id": 104, "titre": "Inventaire ne se met pas à jour", "description": "Les objets achetés n'apparaissent pas immédiatement dans l'inventaire.", "joueurId": 2, "date": "2026-11-16", "statutBogue": "nouveau" },
+    { "id": 105, "titre": "Notification en double", "description": "La même notification de quête apparaît deux fois de suite.", "joueurId": 3, "date": "2026-11-15", "statutBogue": "nouveau" },
+    { "id": 106, "titre": "Carte du monde floue", "description": "La carte du monde devient floue après un zoom avant/arrière.", "joueurId": 2, "date": "2026-11-14", "statutBogue": "nouveau" },
+    { "id": 107, "titre": "Audio coupé en combat", "description": "Le son se coupe pendant les combats contre les boss.", "joueurId": 3, "date": "2026-11-13", "statutBogue": "nouveau" },
+    { "id": 108, "titre": "Déconnexion après sauvegarde", "description": "Le joueur est déconnecté juste après une sauvegarde manuelle.", "joueurId": 2, "date": "2026-11-12", "statutBogue": "nouveau" }
   ]
 }

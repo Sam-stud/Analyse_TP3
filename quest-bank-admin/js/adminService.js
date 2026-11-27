@@ -49,21 +49,46 @@ const AdminService = {
     if (!acces.ok) return { ok: false, raison: acces.raison };
 
     const { users, bugs } = await DataAccess.charger();
-    const bogues = bugs.map((b) => {
-      const joueur = users.find((u) => u.id === b.joueurId);
-      return {
-        id: b.id,
-        titre: b.titre,
-        description: b.description,
-        joueurId: b.joueurId,
-        joueurNom: joueur ? joueur.nom : b.joueurNom || null,
-        statut: joueur ? joueur.statut : null,
-        date: b.date,
-        estAttaque: b.estAttaque === true,
-        typeAttaque: b.typeAttaque || null,
-        compteSupprime: !joueur && !!b.joueurNom,
-      };
-    });
+    const bogues = bugs
+      .map((b) => {
+        const joueur = users.find((u) => u.id === b.joueurId);
+        return {
+          id: b.id,
+          titre: b.titre,
+          description: b.description,
+          joueurId: b.joueurId,
+          joueurNom: joueur ? joueur.nom : b.joueurNom || null,
+          statut: joueur ? joueur.statut : null,
+          date: b.date,
+          estAttaque: b.estAttaque === true,
+          typeAttaque: b.typeAttaque || null,
+          compteSupprime: !joueur && !!b.joueurNom,
+          statutBogue: b.statutBogue || "nouveau",
+        };
+      })
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)) || b.id - a.id);
     return { ok: true, bogues };
+  },
+
+  async changerStatutBogue(bugId, statutBogue) {
+    const acces = Auth.verifierAcces();
+    if (!acces.ok) return { ok: false, raison: acces.raison };
+    const statutsValides = ["nouveau", "en-cours", "resolu"];
+    if (!statutsValides.includes(statutBogue)) {
+      return { ok: false, raison: "statut-invalide" };
+    }
+    DataAccess.changerStatutBogueLocal(bugId, statutBogue);
+    return { ok: true };
+  },
+
+  async niveauAlerteBogues() {
+    const acces = Auth.verifierAcces();
+    if (!acces.ok) return { ok: false, raison: acces.raison };
+    const { bugs } = await DataAccess.charger();
+    const nouveaux = bugs.filter((b) => (b.statutBogue || "nouveau") === "nouveau").length;
+    let niveau = null;
+    if (nouveaux >= 15) niveau = "rouge";
+    else if (nouveaux >= 10) niveau = "jaune";
+    return { ok: true, nouveaux, niveau };
   },
 };
