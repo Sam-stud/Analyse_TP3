@@ -7,14 +7,17 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3h12l4 6-10 12L2 9z' fill='%23e0b84c'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="theme-admin">
   <aside id="menu-navigation" class="menu-lateral">
     <div class="marque">
       <span class="marque-logo" aria-hidden="true"></span>
       <span class="marque-texte">Quest Bank<small>Console de gestion</small></span>
     </div>
-    <p class="titre-menu">Navigation</p>
-    <a href="index.html" class="actif lien-admin">Interface administrateur</a>
+    <p class="titre-menu">Administration</p>
+    <a href="index.html" class="lien-admin actif" aria-current="page">Tableau de bord</a>
+    <a href="joueurs-signales.html" class="lien-signalements">Joueurs signalés</a>
+    <a href="bogues.html" class="lien-bogues">Bogues rapportés</a>
+    <p class="titre-menu">Espace joueur</p>
     <a href="login.html?cible=joueur.html" class="lien-joueur">Interface joueur</a>
   </aside>
   <header id="barre"></header>
@@ -35,6 +38,7 @@
   <script src="js/dataAccess.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/adminService.js"></script>
   <script src="js/pageIndex.js"></script>
 </body>
 </html>

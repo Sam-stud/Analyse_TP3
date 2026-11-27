@@ -14,6 +14,14 @@ const UI = {
     return div;
   },
 
+  // "2026-11-24" -> "24 nov. 2026". Une date absente ou illisible est affichée telle quelle.
+  formatDate(iso) {
+    if (!iso) return "Date inconnue";
+    const d = new Date(`${iso}T00:00:00`);
+    if (Number.isNaN(d.getTime())) return String(iso);
+    return d.toLocaleDateString("fr-CA", { day: "numeric", month: "short", year: "numeric" });
+  },
+
   effacer() {
     const zone = document.getElementById("messages");
     if (zone) zone.innerHTML = "";

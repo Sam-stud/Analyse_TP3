@@ -1,5 +1,7 @@
 // dataAccess.js (socle) : remplace la base de données et les interfaces IUserAccess / IAdminDataAccess / IReportsLogAccess.
 // Les données viennent de data/<jeu>.json (fetch). Les modifications (bannir) sont gardées dans localStorage par-dessus le JSON.
+// Tables : users, signalements, bugs, parties (parties.joueurs = ids des users ayant joué la partie).
+// signalements.signaleurId / signalements.partieId relient un signalement au joueur qui l'a fait et à la partie concernée.
 
 const JEUX_DE_DONNEES = {
   normal: "Normal",
@@ -73,6 +75,18 @@ const DataAccess = {
     }
   },
 
+  _cleStatutsSignalements() {
+    return `qb_sigstatuts_${this.jeuCourant()}`;
+  },
+
+  statutsSignalementsLocaux() {
+    try {
+      return JSON.parse(localStorage.getItem(this._cleStatutsSignalements()) || "{}");
+    } catch (e) {
+      return {};
+    }
+  },
+
   // Les suppressions de compte sont GLOBALES (une seule clé, pas une par jeu de données) :
   // un joueur qui supprime son compte disparaît de tous les jeux (Normal, Limites, Erreurs...).
   // On les identifie par le nom (insensible à la casse), car les ids ne sont pas stables d'un jeu à l'autre
@@ -109,7 +123,7 @@ const DataAccess = {
     localStorage.removeItem(cleAncienne);
   },
 
-  // Retourne { users, signalements, bugs } avec les bannissements locaux appliqués,
+  // Retourne { users, signalements, bugs, parties } avec les bannissements locaux appliqués,
   // les signalements et bogues locaux ajoutés, et sans les comptes supprimés (introuvables pour tous).
   async charger() {
     const donnees = await this.lireJSON(this.jeuCourant());
@@ -117,6 +131,7 @@ const DataAccess = {
     const bans = this.bansLocaux();
     const supprimes = this.comptesSupprimes();
     const statutsBugs = this.statutsBugsLocaux();
+    const statutsSignalements = this.statutsSignalementsLocaux();
     const users = (donnees.users || [])
       .filter((u) => !supprimes.includes(this._normaliserNom(u.nom)))
       .map((u) => (bans.includes(u.id) ? { ...u, statut: "inactif" } : u));
@@ -124,10 +139,15 @@ const DataAccess = {
       ...b,
       statutBogue: statutsBugs[b.id] || b.statutBogue || "nouveau",
     }));
+    const signalements = [...(donnees.signalements || []), ...this.signalementsLocaux()].map((s) => ({
+      ...s,
+      statutSignalement: statutsSignalements[s.id] || s.statutSignalement || "nouveau",
+    }));
     return {
       users,
-      signalements: [...(donnees.signalements || []), ...this.signalementsLocaux()],
+      signalements,
       bugs,
+      parties: Array.isArray(donnees.parties) ? donnees.parties : [],
     };
   },
 
@@ -155,7 +175,8 @@ const DataAccess = {
     localStorage.setItem(this._cleStatutsBugs(), JSON.stringify(statuts));
   },
 
-  signalerCyberattaqueLocal(signalement) {
+  // Ajoute un signalement (joueur signalé par un autre joueur, ou cyberattaque détectée). Retourne son id.
+  ajouterSignalementLocal(signalement) {
     const signalements = this.signalementsLocaux();
     let id = Date.now();
     while (signalements.some((s) => s.id === id)) {
@@ -163,6 +184,17 @@ const DataAccess = {
     }
     signalements.push({ id, ...signalement });
     localStorage.setItem(this._cleSignalements(), JSON.stringify(signalements));
+    return id;
+  },
+
+  signalerCyberattaqueLocal(signalement) {
+    return this.ajouterSignalementLocal(signalement);
+  },
+
+  changerStatutSignalementLocal(signalementId, statutSignalement) {
+    const statuts = this.statutsSignalementsLocaux();
+    statuts[signalementId] = statutSignalement;
+    localStorage.setItem(this._cleStatutsSignalements(), JSON.stringify(statuts));
   },
 
   // Supprime le compte du joueur (par son nom) dans tous les jeux de données.

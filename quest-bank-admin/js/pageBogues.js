@@ -73,7 +73,7 @@ function afficherBogues(bogues) {
     const tdJoueur = creerCelluleBogue(libelleJoueur, "nom");
     if (dejaBanni) ajouterBadge(tdJoueur, "DÉJÀ BANNI", "badge-inactif");
     tr.appendChild(tdJoueur);
-    tr.appendChild(creerCelluleBogue(b.date));
+    tr.appendChild(creerCelluleBogue(UI.formatDate(b.date)));
 
     const tdStatut = document.createElement("td");
     const select = document.createElement("select");

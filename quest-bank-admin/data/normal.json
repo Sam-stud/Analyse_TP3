@@ -14,5 +14,12 @@
     { "id": 100, "titre": "Quête impossible à terminer", "description": "Le bouton Payer reste grisé.", "joueurId": 3, "date": "2026-11-12" },
     { "id": 101, "titre": "Solde incorrect", "description": "Le solde ne se met pas à jour après une quête.", "joueurId": 4, "date": "2026-11-13" },
     { "id": 102, "titre": "Mage ne répond pas", "description": "Le conseiller reste en chargement.", "joueurId": 2, "date": "2026-11-14" }
+  ],
+  "parties": [
+    { "id": 200, "quete": "Les Catacombes du Trésorier", "date": "2026-11-24", "duree": 38, "resultat": "victoire", "joueurs": [2, 3, 4] },
+    { "id": 201, "quete": "Le Pont des Intérêts Composés", "date": "2026-11-21", "duree": 25, "resultat": "defaite", "joueurs": [2, 4] },
+    { "id": 202, "quete": "La Forêt des Budgets Perdus", "date": "2026-11-18", "duree": 51, "resultat": "victoire", "joueurs": [3, 4] },
+    { "id": 203, "quete": "Le Donjon du Crédit", "date": "2026-11-15", "duree": 12, "resultat": "abandon", "joueurs": [2, 3] },
+    { "id": 204, "quete": "L'Épargne du Dragon", "date": "2026-11-09", "duree": 44, "resultat": "victoire", "joueurs": [2, 3, 4] }
   ]
 }
