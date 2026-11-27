@@ -39,6 +39,19 @@ const DataAccess = {
     }
   },
 
+  // Débannissements : gardés à part, car un compte peut être « inactif » directement dans le JSON.
+  _cleDebans() {
+    return `qb_debans_${this.jeuCourant()}`;
+  },
+
+  debansLocaux() {
+    try {
+      return JSON.parse(localStorage.getItem(this._cleDebans()) || "[]");
+    } catch (e) {
+      return [];
+    }
+  },
+
   _cleBugs() {
     return `qb_bugs_${this.jeuCourant()}`;
   },
@@ -129,11 +142,13 @@ const DataAccess = {
     const donnees = await this.lireJSON(this.jeuCourant());
     this._migrerAnciennesSuppressions(donnees);
     const bans = this.bansLocaux();
+    const debans = this.debansLocaux();
     const supprimes = this.comptesSupprimes();
     const statutsBugs = this.statutsBugsLocaux();
     const statutsSignalements = this.statutsSignalementsLocaux();
     const users = (donnees.users || [])
       .filter((u) => !supprimes.includes(this._normaliserNom(u.nom)))
+      .map((u) => (debans.includes(u.id) ? { ...u, statut: "actif" } : u))
       .map((u) => (bans.includes(u.id) ? { ...u, statut: "inactif" } : u));
     const bugs = [...(donnees.bugs || []), ...this.bugsLocaux()].map((b) => ({
       ...b,
@@ -151,12 +166,23 @@ const DataAccess = {
     };
   },
 
+  // Les deux listes sont exclusives : la dernière action (bannir ou débannir) gagne.
   bannirLocal(userId) {
     const bans = this.bansLocaux();
     if (!bans.includes(userId)) {
       bans.push(userId);
     }
     localStorage.setItem(this._cleBans(), JSON.stringify(bans));
+    localStorage.setItem(this._cleDebans(), JSON.stringify(this.debansLocaux().filter((id) => id !== userId)));
+  },
+
+  debannirLocal(userId) {
+    const debans = this.debansLocaux();
+    if (!debans.includes(userId)) {
+      debans.push(userId);
+    }
+    localStorage.setItem(this._cleDebans(), JSON.stringify(debans));
+    localStorage.setItem(this._cleBans(), JSON.stringify(this.bansLocaux().filter((id) => id !== userId)));
   },
 
   signalerBogueLocal(bogue) {

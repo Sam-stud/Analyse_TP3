@@ -68,6 +68,20 @@ const AdminService = {
     return { ok: true, nom: user.nom };
   },
 
+  // Débannit un joueur : le redéclare actif. Ses signalements et leur suivi ne changent pas.
+  async debannirUtilisateur(joueurId) {
+    const acces = Auth.verifierAcces();
+    if (!acces.ok) return { ok: false, raison: acces.raison };
+
+    const { users } = await DataAccess.charger();
+    const user = users.find((u) => u.id === joueurId);
+    if (!user) return { ok: false, raison: "introuvable" };
+    if (user.statut !== "inactif") return { ok: false, raison: "deja-actif", nom: user.nom };
+
+    DataAccess.debannirLocal(joueurId);
+    return { ok: true, nom: user.nom };
+  },
+
   // ---------- US 282 (Samithika) ----------
 
   // Liste des bogues signalés par les joueurs, avec le nom du joueur (croisement bugs x users).

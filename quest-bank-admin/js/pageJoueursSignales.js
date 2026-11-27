@@ -138,10 +138,13 @@ function afficherJoueurs(joueurs) {
     if (j.compteSupprime) {
       tdAction.appendChild(creerBadge("Bannissement impossible", "badge-inconnu"));
     } else {
+      // Un joueur banni peut être débanni ; sinon (actif ou introuvable) on propose « Bannir ».
+      const banni = j.statut === "inactif";
       const bouton = document.createElement("button");
       bouton.type = "button";
-      bouton.className = "danger btn-bannir";
-      bouton.textContent = "Bannir";
+      bouton.className = banni ? "secondaire btn-debannir" : "danger btn-bannir";
+      bouton.textContent = banni ? "Débannir" : "Bannir";
+      bouton.setAttribute("aria-label", `${bouton.textContent} ${j.nom || `le joueur id ${j.joueurId}`}`);
       bouton.dataset.joueurId = j.joueurId;
       tdAction.appendChild(bouton);
     }
@@ -170,6 +173,11 @@ async function rafraichir() {
 }
 
 async function bannir(joueurId) {
+  // US 55 : confirmation avant de bannir. « Annuler » : rien n'est fait, aucun message.
+  const joueur = derniersSignalements.find((j) => j.joueurId === joueurId);
+  const nom = (joueur && joueur.nom) || `id ${joueurId}`;
+  if (!window.confirm(`Voulez-vous vraiment bannir le joueur ${nom} ?`)) return;
+
   try {
     const r = await AdminService.bannirUtilisateur(joueurId);
 
@@ -189,6 +197,31 @@ async function bannir(joueurId) {
   } catch (e) {
     console.error(e);
     UI.message("erreur", "Données introuvables : le bannissement n'a pas pu être effectué.");
+  }
+}
+
+async function debannir(joueurId) {
+  const joueur = derniersSignalements.find((j) => j.joueurId === joueurId);
+  const nom = (joueur && joueur.nom) || `id ${joueurId}`;
+  if (!window.confirm(`Voulez-vous vraiment réactiver le joueur ${nom} ?`)) return;
+
+  try {
+    const r = await AdminService.debannirUtilisateur(joueurId);
+    if (r.ok) {
+      UI.message("succes", `Le joueur ${r.nom} a été débanni. Il est de nouveau actif et peut accéder au jeu.`);
+    } else if (r.raison === "deja-actif") {
+      UI.message("info", `Le joueur ${r.nom} est déjà actif.`);
+    } else if (r.raison === "introuvable") {
+      UI.message("erreur", "Joueur introuvable : le compte n'existe plus. Aucune réactivation n'a été effectuée.");
+    } else {
+      // jeton expiré, absent ou rôle insuffisant : aucune réactivation n'est effectuée
+      UI.messageAcces(ACTION_BANNIR);
+      return;
+    }
+    await rafraichir2();
+  } catch (e) {
+    console.error(e);
+    UI.message("erreur", "Données introuvables : le débannissement n'a pas pu être effectué.");
   }
 }
 
@@ -234,6 +267,8 @@ document.addEventListener("DOMContentLoaded", () => {
   corps.addEventListener("click", (evt) => {
     const bouton = evt.target.closest(".btn-bannir");
     if (bouton) bannir(Number(bouton.dataset.joueurId));
+    const boutonDebannir = evt.target.closest(".btn-debannir");
+    if (boutonDebannir) debannir(Number(boutonDebannir.dataset.joueurId));
   });
   corps.addEventListener("change", (evt) => {
     const select = evt.target.closest(".select-statut-signalement");

@@ -703,6 +703,14 @@ td .btn-bannir {
   box-shadow: none;
 }
 td .btn-bannir:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+td button.secondaire.btn-debannir {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--succes-texte);
+  border-color: var(--succes-bord);
+  box-shadow: none;
+}
+td button.secondaire.btn-debannir:hover { background: var(--succes-doux); }
 
 .barre-filtres {
   display: flex;
