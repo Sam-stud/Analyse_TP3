@@ -10,7 +10,20 @@
     { "id": 11, "joueurId": 999, "motif": "Signalement d'un joueur qui n'existe plus", "date": "2026-11-11" }
   ],
   "bugs": [
-    { "id": 100, "titre": "Quête impossible à terminer", "description": "Le bouton Payer reste grisé.", "joueurId": 3, "date": "2026-11-12" },
-    { "id": 101, "titre": "Bogue d'un joueur inconnu", "description": "Ce bogue référence un joueurId absent de users.json.", "joueurId": 999, "date": "2026-11-13" }
+    { "id": 100, "titre": "Quête impossible à terminer", "description": "Le bouton Payer reste grisé.", "joueurId": 3, "date": "2026-11-25", "statutBogue": "nouveau" },
+    { "id": 101, "titre": "Bogue d'un joueur inconnu", "description": "Ce bogue référence un joueurId absent de users.json.", "joueurId": 999, "date": "2026-11-24", "statutBogue": "nouveau" },
+    { "id": 102, "titre": "Crash à l'ouverture de l'inventaire", "description": "L'application se ferme lors de l'ouverture de l'inventaire.", "joueurId": 2, "date": "2026-11-23", "statutBogue": "nouveau" },
+    { "id": 103, "titre": "Récompense non reçue", "description": "La récompense de quête n'est pas créditée après validation.", "joueurId": 3, "date": "2026-11-22", "statutBogue": "nouveau" },
+    { "id": 104, "titre": "Texte déborde sur mobile", "description": "Les descriptions de quête débordent de l'écran sur mobile.", "joueurId": 2, "date": "2026-11-21", "statutBogue": "nouveau" },
+    { "id": 105, "titre": "Bouton déconnexion inactif", "description": "Le bouton de déconnexion ne répond pas au clic.", "joueurId": 5, "date": "2026-11-20", "statutBogue": "nouveau" },
+    { "id": 106, "titre": "Chargement infini", "description": "L'écran de chargement reste bloqué après connexion.", "joueurId": 2, "date": "2026-11-19", "statutBogue": "nouveau" },
+    { "id": 107, "titre": "Icônes manquantes", "description": "Certaines icônes ne s'affichent pas dans le menu.", "joueurId": 3, "date": "2026-11-18", "statutBogue": "nouveau" },
+    { "id": 108, "titre": "Erreur de sauvegarde", "description": "Un message d'erreur apparaît lors de la sauvegarde.", "joueurId": 2, "date": "2026-11-17", "statutBogue": "nouveau" },
+    { "id": 109, "titre": "Duplication d'objet", "description": "Un objet peut être dupliqué via le commerce.", "joueurId": 3, "date": "2026-11-16", "statutBogue": "nouveau" },
+    { "id": 110, "titre": "Mauvaise traduction", "description": "Certaines chaînes restent en anglais dans l'interface FR.", "joueurId": 2, "date": "2026-11-15", "statutBogue": "nouveau" },
+    { "id": 111, "titre": "Son absent au lancement", "description": "Aucun son n'est joué au lancement du jeu.", "joueurId": 3, "date": "2026-11-14", "statutBogue": "nouveau" },
+    { "id": 112, "titre": "Barre de vie incorrecte", "description": "La barre de vie affiche une valeur supérieure au maximum.", "joueurId": 5, "date": "2026-11-13", "statutBogue": "nouveau" },
+    { "id": 113, "titre": "PNJ invisible", "description": "Un PNJ de quête n'apparaît pas dans la zone prévue.", "joueurId": 2, "date": "2026-11-12", "statutBogue": "nouveau" },
+    { "id": 114, "titre": "Mini-carte décalée", "description": "La mini-carte ne suit plus la position du joueur.", "joueurId": 3, "date": "2026-11-11", "statutBogue": "nouveau" }
   ]
 }

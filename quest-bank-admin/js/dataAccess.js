@@ -49,6 +49,18 @@ const DataAccess = {
     }
   },
 
+  _cleStatutsBugs() {
+    return `qb_bugstatuts_${this.jeuCourant()}`;
+  },
+
+  statutsBugsLocaux() {
+    try {
+      return JSON.parse(localStorage.getItem(this._cleStatutsBugs()) || "{}");
+    } catch (e) {
+      return {};
+    }
+  },
+
   _cleSignalements() {
     return `qb_signalements_${this.jeuCourant()}`;
   },
@@ -104,13 +116,18 @@ const DataAccess = {
     this._migrerAnciennesSuppressions(donnees);
     const bans = this.bansLocaux();
     const supprimes = this.comptesSupprimes();
+    const statutsBugs = this.statutsBugsLocaux();
     const users = (donnees.users || [])
       .filter((u) => !supprimes.includes(this._normaliserNom(u.nom)))
       .map((u) => (bans.includes(u.id) ? { ...u, statut: "inactif" } : u));
+    const bugs = [...(donnees.bugs || []), ...this.bugsLocaux()].map((b) => ({
+      ...b,
+      statutBogue: statutsBugs[b.id] || b.statutBogue || "nouveau",
+    }));
     return {
       users,
       signalements: [...(donnees.signalements || []), ...this.signalementsLocaux()],
-      bugs: [...(donnees.bugs || []), ...this.bugsLocaux()],
+      bugs,
     };
   },
 
@@ -128,8 +145,14 @@ const DataAccess = {
     while (bugs.some((b) => b.id === id)) {
       id += 1;
     }
-    bugs.push({ id, ...bogue });
+    bugs.push({ id, statutBogue: "nouveau", ...bogue });
     localStorage.setItem(this._cleBugs(), JSON.stringify(bugs));
+  },
+
+  changerStatutBogueLocal(bugId, statutBogue) {
+    const statuts = this.statutsBugsLocaux();
+    statuts[bugId] = statutBogue;
+    localStorage.setItem(this._cleStatutsBugs(), JSON.stringify(statuts));
   },
 
   signalerCyberattaqueLocal(signalement) {

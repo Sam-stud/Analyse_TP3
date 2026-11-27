@@ -1,5 +1,11 @@
 // pageBogues.js : US 282 (Samithika). Affiche les bogues rapportés par les joueurs.
 
+const STATUTS_BOGUE = [
+  { valeur: "nouveau", libelle: "Nouveau" },
+  { valeur: "en-cours", libelle: "En cours" },
+  { valeur: "resolu", libelle: "Résolu" },
+];
+
 function creerCelluleBogue(texte, classe) {
   const td = document.createElement("td");
   td.textContent = texte; // textContent : les données JSON ne sont jamais interprétées comme du HTML
@@ -68,6 +74,21 @@ function afficherBogues(bogues) {
     if (dejaBanni) ajouterBadge(tdJoueur, "DÉJÀ BANNI", "badge-inactif");
     tr.appendChild(tdJoueur);
     tr.appendChild(creerCelluleBogue(b.date));
+
+    const tdStatut = document.createElement("td");
+    const select = document.createElement("select");
+    select.className = "select-statut-bogue";
+    select.dataset.bugId = b.id;
+    STATUTS_BOGUE.forEach((s) => {
+      const opt = document.createElement("option");
+      opt.value = s.valeur;
+      opt.textContent = s.libelle;
+      if ((b.statutBogue || "nouveau") === s.valeur) opt.selected = true;
+      select.appendChild(opt);
+    });
+    tdStatut.appendChild(select);
+    tr.appendChild(tdStatut);
+
     corps.appendChild(tr);
   });
 }
@@ -84,6 +105,7 @@ async function rafraichir() {
       return;
     }
     afficherBogues(resultat.bogues);
+    UI.rafraichirAlerteBogues();
   } catch (e) {
     console.error(e);
     afficherBogues([]);
@@ -104,5 +126,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   UI.barreOutils({ onChange: rafraichir });
   document.getElementById("btn-rafraichir").addEventListener("click", rafraichir);
+  document.getElementById("corps-bogues").addEventListener("change", async (evt) => {
+    const select = evt.target.closest(".select-statut-bogue");
+    if (!select) return;
+    const bugId = Number(select.dataset.bugId);
+    const statutBogue = select.value;
+    const r = await AdminService.changerStatutBogue(bugId, statutBogue);
+    if (!r.ok) {
+      UI.messageAcces("modifier le statut des bogues");
+      await rafraichir();
+      return;
+    }
+    await rafraichir();
+    UI.rafraichirAlerteBogues();
+  });
   rafraichir();
 });
