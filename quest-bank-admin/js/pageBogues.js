@@ -6,6 +6,13 @@ const STATUTS_BOGUE = [
   { valeur: "resolu", libelle: "Résolu" },
 ];
 
+let derniersBogues = [];
+
+function filtreStatutBogueCourant() {
+  const select = document.getElementById("filtre-statut-bogue");
+  return select ? select.value : "tous";
+}
+
 function creerCelluleBogue(texte, classe) {
   const td = document.createElement("td");
   td.textContent = texte; // textContent : les données JSON ne sont jamais interprétées comme du HTML
@@ -22,20 +29,30 @@ function ajouterBadge(cellule, texte, classe) {
 }
 
 function afficherBogues(bogues) {
+  derniersBogues = bogues;
   const corps = document.getElementById("corps-bogues");
   const tableau = document.getElementById("tableau-bogues");
   const vide = document.getElementById("liste-vide");
   corps.innerHTML = "";
 
-  if (bogues.length === 0) {
+  const filtre = filtreStatutBogueCourant();
+  const visibles = filtre === "tous"
+    ? bogues
+    : bogues.filter((b) => (b.statutBogue || "nouveau") === filtre);
+
+  if (visibles.length === 0) {
     tableau.hidden = true;
     vide.hidden = false;
+    vide.textContent = bogues.length === 0
+      ? "Aucun bogue rapporté pour le moment."
+      : "Aucun bogue ne correspond à ce filtre.";
     return;
   }
   tableau.hidden = false;
   vide.hidden = true;
+  vide.textContent = "Aucun bogue rapporté pour le moment.";
 
-  bogues.forEach((b) => {
+  visibles.forEach((b) => {
     const attaque = b.estAttaque === true;
     const compteSupprime = b.compteSupprime === true;
     const dejaBanni = b.statut === "inactif";
@@ -126,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   UI.barreOutils({ onChange: rafraichir });
   document.getElementById("btn-rafraichir").addEventListener("click", rafraichir);
+  document.getElementById("filtre-statut-bogue").addEventListener("change", () => afficherBogues(derniersBogues));
   document.getElementById("corps-bogues").addEventListener("change", async (evt) => {
     const select = evt.target.closest(".select-statut-bogue");
     if (!select) return;
